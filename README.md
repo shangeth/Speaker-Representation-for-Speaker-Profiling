@@ -64,7 +64,7 @@ python test.py --model_checkpoint='path to saved checkpoint'
 | Model                                  	| Height RMSE 	|        	| Height MAE 	|        	| Age RMSE 	|        	| Age MAE 	|        	| Gender Acc 	|
 |----------------------------------------	|-------------	|--------	|------------	|--------	|----------	|--------	|---------	|--------	|------------	|
 |                                        	| Male        	| Female 	| Male       	| Female 	| Male     	| Female 	| Male    	| Female 	|            	|
-| Run 1                        	| 7.2         	| 6.4    	| 5.4        	| 5.0    	| 7.5      	| 7.8    	| 5.2     	| 5.2    	| 0.995      	|
+| Run 1(Trained on Libri Dev Dataset only)                        	| 7.2         	| 6.4    	| 5.4        	| 5.0    	| 7.5      	| 7.8    	| 5.2     	| 5.2    	| 0.995      	|
 
 ### TIMIT Previous Results
 |        Model        	|  Height 	|  RMSE  	|  Height 	|   MAE  	|  Age 	|  RMSE  	|  Age 	|   MAE  	| Gender Acc 	|
