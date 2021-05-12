@@ -10,8 +10,7 @@ my_parser.add_argument('--path',
 args = my_parser.parse_args()
 
 
-original_data_path = os.path.join(args.path, 'dev-clean')
-# 'train-clean-360') # cange if other folders(like dev-clean) are used
+original_data_path = os.path.join(args.path, 'train-clean-360') # change if other folders(like dev-clean) are used
 final_dir = os.path.join(args.path, 'final_repr_data')
 
 if not os.path.exists(final_dir): 
