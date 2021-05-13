@@ -77,3 +77,19 @@ class Profiler(nn.Module):
         age = self.age_regressor(z)
         gender = self.gender_classifier(z)
         return height, age, gender
+
+
+class ProfilerH(nn.Module):
+    def __init__(self, dim=512):
+        super().__init__()
+        lstm_h = dim
+
+        self.height_regressor = nn.Sequential(
+            nn.Linear(lstm_h,  int(lstm_h/4)),
+            nn.ReLU(),
+            nn.Linear(int(lstm_h/4), 1),
+        )
+
+    def forward(self, z):
+        height = self.height_regressor(z)
+        return height
