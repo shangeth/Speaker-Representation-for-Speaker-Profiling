@@ -12,6 +12,7 @@ from pytorch_lightning.metrics.classification import Accuracy
 from TIMIT.dataset import TIMITDataset
 from LibriSpeech.dataset import LibriDataset
 from Model.model import Encoder, Discriminator, Accumulator, Profiler
+from Model.spectral_model import SEncoder, SAccumulator
 from Model.utils import RMSELoss
 
 from config import TIMITConfig
@@ -26,10 +27,16 @@ class LightningModel(pl.LightningModule):
         HPARAMS = vars(hparams)
         self.HPARAMS = HPARAMS
 
-        self.E = Encoder()
-        self.A = Accumulator(HPARAMS['hidden_size'])
-        self.profiler = Profiler(HPARAMS['hidden_size'])
-        self.D = Discriminator(2*HPARAMS['hidden_size'])
+        if HPARAMS['model_type'] == 'raw':
+            self.E = Encoder(HPARAMS['hidden_size'])
+            self.A = Accumulator(HPARAMS['hidden_size'])
+            self.profiler = Profiler(HPARAMS['hidden_size'])
+            self.D = Discriminator(2*HPARAMS['hidden_size'])
+        else:
+            self.E = SEncoder(HPARAMS['hidden_size'])
+            self.A = SAccumulator(HPARAMS['hidden_size'])
+            self.profiler = Profiler(HPARAMS['hidden_size'])
+            self.D = Discriminator(2*HPARAMS['hidden_size'])
 
 
         self.classification_criterion = MSE()

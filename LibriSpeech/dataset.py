@@ -15,6 +15,7 @@ class LibriDataset(Dataset):
         self.root = os.path.join(hparams.un_data_path, 'final_repr_data')
         self.noise_dataset_path = hparams.noise_dataset_path
         self.wav_len = hparams.timit_wav_len
+        self.data_type = hparams.data_type
 
         self.speakers = os.listdir(self.root)
         self.speakersint = [int(x) for x in self.speakers]
@@ -24,6 +25,13 @@ class LibriDataset(Dataset):
             wavencoder.transforms.PadCrop(pad_crop_length=self.wav_len, pad_position='random', crop_position='random'),
             wavencoder.transforms.AdditiveNoise(self.noise_dataset_path, p=0.1),
             wavencoder.transforms.Clipping(p=0.1),
+            ])
+        
+        if self.data_type == 'spectral':
+            self.spectral_transform = torchaudio.transforms.MFCC(n_mfcc=40, log_mels=True)
+            self.spec_aug = wavencoder.transforms.Compose([  
+                torchaudio.transforms.FrequencyMasking(5),
+                torchaudio.transforms.TimeMasking(5),
             ])
 
         self.info_file = os.path.join(hparams.un_data_path, 'SPEAKERS.TXT')
@@ -58,6 +66,8 @@ class LibriDataset(Dataset):
         filename = random.choice(os.listdir(os.path.join(self.root, query_speaker)))
         x, _ = torchaudio.load(os.path.join(self.root, query_speaker, filename))
         x = self.train_transform(x)
+        x = self.spectral_transform(x)
+        x = self.spec_aug(x)
 
         # Positive 
         # if random.random()<0.1:
@@ -68,11 +78,15 @@ class LibriDataset(Dataset):
         filename = random.choice(os.listdir(os.path.join(self.root, p_key_speaker)))
         xp, _ = torchaudio.load(os.path.join(self.root, p_key_speaker, filename))
         xp = self.train_transform(xp)
+        xp = self.spectral_transform(xp)
+        xp = self.spec_aug(xp)
 
         # Negative 
         n_key_speaker = random.choice(list(set(self.speakers) - set([query_speaker])))
         filename = random.choice(os.listdir(os.path.join(self.root, n_key_speaker)))
         xn, _ = torchaudio.load(os.path.join(self.root, n_key_speaker, filename))
         xn = self.train_transform(xn)
+        xn = self.spectral_transform(xn)
+        xn = self.spec_aug(xn)
         
         return x, xp, xn

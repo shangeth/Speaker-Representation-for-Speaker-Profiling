@@ -13,7 +13,11 @@ import torch
 import torch.utils.data as data
 
 from TIMIT.dataset import TIMITDataset
-from lightning_model import LightningModel
+
+if TIMITConfig.training_type == 'H':
+    from lightning_model_h import LightningModel
+else:
+    from lightning_model import LightningModel
 
 # SEED
 SEED=100

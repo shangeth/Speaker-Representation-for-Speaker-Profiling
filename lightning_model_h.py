@@ -10,7 +10,7 @@ from pytorch_lightning.metrics.regression import MeanSquaredError  as MSE
 
 from TIMIT.dataset import TIMITDataset
 from LibriSpeech.dataset import LibriDataset
-from Model.model import Encoder, Discriminator, Accumulator, Profiler
+from Model.model import Encoder, Discriminator, Accumulator, ProfilerH
 from Model.utils import RMSELoss
 
 from config import TIMITConfig
@@ -27,9 +27,8 @@ class LightningModel(pl.LightningModule):
 
         self.E = Encoder()
         self.A = Accumulator(HPARAMS['hidden_size'])
-        self.profiler = Profiler(HPARAMS['hidden_size'])
+        self.profiler = ProfilerH(HPARAMS['hidden_size'])
         self.D = Discriminator(2*HPARAMS['hidden_size'])
-
 
         self.classification_criterion = MSE()
         self.regression_criterion = MSE()
@@ -106,22 +105,11 @@ class LightningModel(pl.LightningModule):
         height_mae = self.mae_criterion(y_hat_h*self.h_std+self.h_mean, y_h*self.h_std+self.h_mean)
 
         loss = repr_loss + profiling_loss + ss_loss
-        # if self.current_epoch < 100:
-        #     loss = 100 * repr_loss + profiling_loss + ss_loss
-        # else:
-        #     loss = repr_loss + profiling_loss + 100 * ss_loss
-
-        #schedule1
-        # if self.current_epoch < 100:
-        #     loss = 100*repr_loss + profiling_loss + ss_loss
-        # else:
-        #     loss = repr_loss + profiling_loss + 100 * ss_loss
-
 
         return {'loss':loss, 
                 'repr_loss' : repr_loss,
                 'profiling_loss' : profiling_loss,
-                'train_height_mae':height_mae.item()
+                'train_height_mae':height_mae.item(),
                 'consistency_loss':ss_loss
                 }
     

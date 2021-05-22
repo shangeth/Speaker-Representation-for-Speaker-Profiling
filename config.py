@@ -9,7 +9,7 @@ class TIMITConfig(object):
     un_data_path = '/home/shangeth/DATASET/LibriSpeech/LibriSpeech'
 
     # length of wav files for training and testing
-    timit_wav_len = 16000 * 1
+    timit_wav_len = 16000 * 3
 
     batch_size = 128
     epochs = 200
@@ -20,13 +20,13 @@ class TIMITConfig(object):
     gamma = 1
 
     # data type - raw/spectral
-    data_type = 'raw'
+    data_type = 'spectral'
 
     # model type
     ## AHG 
-    # wav2vecLSTMAttn/spectralCNNLSTM/MultiScale
+    # wav2vecLSTMAttn/spectralCNNLSTM
 
-    model_type = 'MultiScale'
+    model_type = 'spectralCNNLSTM'
 
     # AHG or only H
     training_type = 'AHG'

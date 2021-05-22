@@ -6,7 +6,7 @@ import wavencoder
 from transformers import Wav2Vec2Model
 
 class Encoder(nn.Module):
-    def __init__(self):
+    def __init__(self, dim=128):
         super().__init__()
         self.feature_extractor = wavencoder.models.Wav2Vec(pretrained=True)
         # Wav2Vec2Model.from_pretrained("facebook/wav2vec2-base-960h").feature_extractor
